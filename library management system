@@ -1,0 +1,49 @@
+index.html
+<!-- login.php -->
+<?php
+session_start();
+include("db.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($result) == 1) {
+        $_SESSION["username"] = $username;
+        $_SESSION["role"] = "librarian"; // You might have a 'role' column in your users table
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        echo "Invalid username or password";
+    }
+}
+?>
+
+<!-- Login Form (login.php) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Library Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-form">
+        <h2>Login</h2>
+        <form action="login.php" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <a href="register.php">Register</a>
+    </div>
+</body>
+</html>
